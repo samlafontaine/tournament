@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import Matches from "./matches";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, CalendarIcon } from "@heroicons/react/24/outline";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -25,25 +27,48 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 const matchSchema = z.object({
-  team1: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  team2: z.string().min(2).max(50),
-  score1: z.number(),
-  score2: z.number(),
+  team1: z.string(),
+  team2: z.string(),
+  score1: z.coerce.number(),
+  score2: z.coerce.number(),
   date: z.date(),
 });
 
+type Match = {
+  team1: string;
+  team2: string;
+  score1: number;
+  score2: number;
+  date: Date;
+};
+
 export default function Home() {
+  const [list, setList] = useState<Match[]>([]);
+
   const form = useForm<z.infer<typeof matchSchema>>({
     resolver: zodResolver(matchSchema),
     defaultValues: {
       team1: "",
       team2: "",
-      score1: 0,
-      score2: 0,
+      score1: 0.0,
+      score2: 0.0,
       date: new Date(),
     },
   });
@@ -51,6 +76,7 @@ export default function Home() {
   function onSubmit(values: z.infer<typeof matchSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    setList((prevList) => [...prevList, values]);
     console.log(values);
   }
 
@@ -78,8 +104,8 @@ export default function Home() {
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Title</DialogTitle>
-                <DialogDescription>Description</DialogDescription>
+                <DialogTitle>Add match</DialogTitle>
+                <DialogDescription>Add recently played match</DialogDescription>
               </DialogHeader>
               <Form {...form}>
                 <form
@@ -92,23 +118,154 @@ export default function Home() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Team 1</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Team 1" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          This is the name of the first team.
-                        </FormDescription>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a team" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Team 1">Team 1</SelectItem>
+                            <SelectItem value="Team 2">Team 2</SelectItem>
+                            <SelectItem value="Team 3">Team 3</SelectItem>
+                            <SelectItem value="Team 4">Team 4</SelectItem>
+                            <SelectItem value="Team 5">Team 5</SelectItem>
+                            <SelectItem value="Team 6">Team 6</SelectItem>
+                            <SelectItem value="Team 7">Team 7</SelectItem>
+                            <SelectItem value="Team 8">Team 8</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <Button type="submit">Submit</Button>
+                  <FormField
+                    control={form.control}
+                    name="team2"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Team 2</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a team" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Team 1">Team 1</SelectItem>
+                            <SelectItem value="Team 2">Team 2</SelectItem>
+                            <SelectItem value="Team 3">Team 3</SelectItem>
+                            <SelectItem value="Team 4">Team 4</SelectItem>
+                            <SelectItem value="Team 5">Team 5</SelectItem>
+                            <SelectItem value="Team 6">Team 6</SelectItem>
+                            <SelectItem value="Team 7">Team 7</SelectItem>
+                            <SelectItem value="Team 8">Team 8</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    rules={{ required: true }}
+                    name="score1"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Score 1</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="0"
+                            {...field}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    rules={{ required: true }}
+                    name="score2"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Score 2</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="0"
+                            {...field}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="date"
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col w-full">
+                        <FormLabel>Match date</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  " pl-3 text-left font-normal",
+                                  !field.value && "text-muted-foreground",
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <DialogClose asChild>
+                    <Button type="submit">Submit</Button>
+                  </DialogClose>
                 </form>
               </Form>
             </DialogContent>
           </Dialog>
         </div>
         <Matches />
+        <div id="matchlist">
+          {list.map((item, index) => (
+            <div key={index}>
+              {/* Render your list items here */}
+              <p>
+                {item.team1}: {item.score1} - {item.team2}: {item.score2}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </main>
   );
