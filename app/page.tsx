@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Matches from "./matches";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, CalendarIcon } from "@heroicons/react/24/outline";
@@ -39,6 +38,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -61,6 +69,11 @@ type Match = {
 
 export default function Home() {
   const [list, setList] = useState<Match[]>([]);
+  const [selectedValue, setSelectedValue] = useState("matches");
+
+  const handleToggleChange = (value: string) => {
+    setSelectedValue(value);
+  };
 
   const form = useForm<z.infer<typeof matchSchema>>({
     resolver: zodResolver(matchSchema),
@@ -90,7 +103,12 @@ export default function Home() {
       <div className="flex flex-col w-6/12">
         <div className="flex flex-row justify-between mb-4">
           <div>
-            <ToggleGroup type="single">
+            <ToggleGroup
+              type="single"
+              defaultValue="matches"
+              value={selectedValue}
+              onValueChange={handleToggleChange}
+            >
               <ToggleGroupItem value="matches">Recent matches</ToggleGroupItem>
               <ToggleGroupItem value="rankings">Rankings</ToggleGroupItem>
             </ToggleGroup>
@@ -128,14 +146,14 @@ export default function Home() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="Team 1">Team 1</SelectItem>
-                            <SelectItem value="Team 2">Team 2</SelectItem>
-                            <SelectItem value="Team 3">Team 3</SelectItem>
-                            <SelectItem value="Team 4">Team 4</SelectItem>
-                            <SelectItem value="Team 5">Team 5</SelectItem>
-                            <SelectItem value="Team 6">Team 6</SelectItem>
-                            <SelectItem value="Team 7">Team 7</SelectItem>
-                            <SelectItem value="Team 8">Team 8</SelectItem>
+                            <SelectItem value="Blue">Blue</SelectItem>
+                            <SelectItem value="Red">Red</SelectItem>
+                            <SelectItem value="Green">Green</SelectItem>
+                            <SelectItem value="Yellow">Yellow</SelectItem>
+                            <SelectItem value="Orange">Orange</SelectItem>
+                            <SelectItem value="Purple">Purple</SelectItem>
+                            <SelectItem value="Pink">Pink</SelectItem>
+                            <SelectItem value="Cyan">Cyan</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -158,14 +176,14 @@ export default function Home() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="Team 1">Team 1</SelectItem>
-                            <SelectItem value="Team 2">Team 2</SelectItem>
-                            <SelectItem value="Team 3">Team 3</SelectItem>
-                            <SelectItem value="Team 4">Team 4</SelectItem>
-                            <SelectItem value="Team 5">Team 5</SelectItem>
-                            <SelectItem value="Team 6">Team 6</SelectItem>
-                            <SelectItem value="Team 7">Team 7</SelectItem>
-                            <SelectItem value="Team 8">Team 8</SelectItem>
+                            <SelectItem value="Blue">Blue</SelectItem>
+                            <SelectItem value="Red">Red</SelectItem>
+                            <SelectItem value="Green">Green</SelectItem>
+                            <SelectItem value="Yellow">Yellow</SelectItem>
+                            <SelectItem value="Orange">Orange</SelectItem>
+                            <SelectItem value="Purple">Purple</SelectItem>
+                            <SelectItem value="Pink">Pink</SelectItem>
+                            <SelectItem value="Cyan">Cyan</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -255,17 +273,64 @@ export default function Home() {
             </DialogContent>
           </Dialog>
         </div>
-        <Matches />
-        <div id="matchlist">
-          {list.map((item, index) => (
-            <div key={index}>
-              {/* Render your list items here */}
-              <p>
-                {item.team1}: {item.score1} - {item.team2}: {item.score2}
-              </p>
-            </div>
-          ))}
-        </div>
+        {selectedValue === "matches" ? (
+          <div>
+            {list.map((item, index) => (
+              <div key={index}>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[200px]">Date</TableHead>
+                      <TableHead>Result</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell className="font-normal">
+                        {item.date.toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-row items-center gap-3">
+                          <div className="flex flex-row items-center gap-2">
+                            {item.score1 > item.score2 ? (
+                              <span className="text-zinc-900 font-medium">
+                                {item.team1}
+                              </span>
+                            ) : (
+                              <span className="text-zinc-500">
+                                {item.team1}
+                              </span>
+                            )}
+                            <span className="p-1 bg-zinc-100 text-zinc-900 rounded">
+                              {item.score1}
+                            </span>
+                          </div>
+                          <div>–</div>
+                          <div className="flex flex-row items-center gap-2">
+                            <span className="p-1 bg-zinc-100 text-zinc-900 rounded">
+                              {item.score2}
+                            </span>
+                            {item.score2 > item.score1 ? (
+                              <span className="text-zinc-900 font-medium">
+                                {item.team2}
+                              </span>
+                            ) : (
+                              <span className="text-zinc-500">
+                                {item.team2}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>hello</p>
+        )}
       </div>
     </main>
   );
