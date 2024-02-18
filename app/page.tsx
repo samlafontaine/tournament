@@ -196,9 +196,8 @@ export default function Home() {
             Fifa tournament
           </p>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Information about Signlify's ongoing Fifa tournament. Add and view
-            recently played matches, and see who's currently leading in the
-            rankings.
+            Information about the ongoing Fifa tournament. Add and view recently
+            played matches, and see who's currently leading in the rankings.
           </p>
         </div>
         <div className="flex flex-row justify-between mb-4">
