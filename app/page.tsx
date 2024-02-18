@@ -191,6 +191,16 @@ export default function Home() {
   return (
     <main className="min-h-screen p-5 md:p-24 flex flex-col items-center">
       <div className="flex flex-col w-full md:w-6/12">
+        <div className="mb-12">
+          <p className="text-2xl font-medium bg-gradient-to-r from-cyan-500 to-blue-500 inline-block text-transparent bg-clip-text mb-1">
+            Fifa tournament
+          </p>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Information about Signlify's ongoing Fifa tournament. Add and view
+            recently played matches, and see who's currently leading in the
+            rankings.
+          </p>
+        </div>
         <div className="flex flex-row justify-between mb-4">
           <div>
             <ToggleGroup
