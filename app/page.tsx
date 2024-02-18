@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Header from "./header";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Button } from "@/components/ui/button";
-import { PlusIcon, CalendarIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/24/outline";
 import {
   Dialog,
   DialogContent,
@@ -11,33 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Table,
   TableBody,
@@ -47,9 +23,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import MatchForm from "./form";
 
 const matchSchema = z.object({
   team1: z.string(),
@@ -74,17 +49,6 @@ export default function Home() {
   const handleToggleChange = (value: string) => {
     setSelectedValue(value);
   };
-
-  const form = useForm<z.infer<typeof matchSchema>>({
-    resolver: zodResolver(matchSchema),
-    defaultValues: {
-      team1: "",
-      team2: "",
-      score1: 0.0,
-      score2: 0.0,
-      date: new Date(),
-    },
-  });
 
   function onSubmit(values: z.infer<typeof matchSchema>) {
     setList((prevList) => [...prevList, values]);
@@ -191,16 +155,7 @@ export default function Home() {
   return (
     <main className="min-h-screen p-5 md:p-24 flex flex-col items-center">
       <div className="flex flex-col w-full md:w-6/12">
-        <div className="mb-12">
-          <p className="text-2xl font-medium bg-gradient-to-r from-cyan-500 to-blue-500 inline-block text-transparent bg-clip-text mb-1">
-            Fifa tournament
-          </p>
-          <p className="text-sm text-zinc-600 leading-relaxed">
-            Information about the ongoing Fifa tournament. Add and view recently
-            played matches, and see who&apos;s currently leading in the
-            rankings.
-          </p>
-        </div>
+        <Header />
         <div className="flex flex-row justify-between mb-4">
           <div>
             <ToggleGroup
@@ -225,159 +180,7 @@ export default function Home() {
                 <DialogTitle>Add match</DialogTitle>
                 <DialogDescription>Add recently played match</DialogDescription>
               </DialogHeader>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-8"
-                >
-                  <div className="flex flex-row items-center gap-2">
-                    <div className="size-4/6">
-                      <FormField
-                        control={form.control}
-                        name="team1"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Team 1</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select a team" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="Blue">Blue</SelectItem>
-                                <SelectItem value="Red">Red</SelectItem>
-                                <SelectItem value="Green">Green</SelectItem>
-                                <SelectItem value="Yellow">Yellow</SelectItem>
-                                <SelectItem value="Orange">Orange</SelectItem>
-                                <SelectItem value="Purple">Purple</SelectItem>
-                                <SelectItem value="Pink">Pink</SelectItem>
-                                <SelectItem value="Cyan">Cyan</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <FormField
-                      control={form.control}
-                      rules={{ required: true }}
-                      name="score1"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Score</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="0"
-                              {...field}
-                              onChange={field.onChange}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="flex flex-row items-center gap-2">
-                    <div className="size-4/6">
-                      <FormField
-                        control={form.control}
-                        name="team2"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Team 2</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select a team" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="Blue">Blue</SelectItem>
-                                <SelectItem value="Red">Red</SelectItem>
-                                <SelectItem value="Green">Green</SelectItem>
-                                <SelectItem value="Yellow">Yellow</SelectItem>
-                                <SelectItem value="Orange">Orange</SelectItem>
-                                <SelectItem value="Purple">Purple</SelectItem>
-                                <SelectItem value="Pink">Pink</SelectItem>
-                                <SelectItem value="Cyan">Cyan</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <FormField
-                      control={form.control}
-                      rules={{ required: true }}
-                      name="score2"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Score</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="0"
-                              {...field}
-                              onChange={field.onChange}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <FormField
-                    control={form.control}
-                    name="date"
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col w-full">
-                        <FormLabel>Date</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  " pl-3 text-left font-normal",
-                                  !field.value && "text-muted-foreground",
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <DialogClose asChild className="w-full">
-                    <Button type="submit">Submit</Button>
-                  </DialogClose>
-                </form>
-              </Form>
+              <MatchForm onSubmit={onSubmit} />
             </DialogContent>
           </Dialog>
         </div>
