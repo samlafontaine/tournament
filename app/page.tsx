@@ -87,8 +87,6 @@ export default function Home() {
   });
 
   function onSubmit(values: z.infer<typeof matchSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     setList((prevList) => [...prevList, values]);
     console.log(values);
   }
@@ -101,20 +99,13 @@ export default function Home() {
 
   // Number of games played
 
-  function countOccurrences<T>(
-    arr: T[],
-    properties: (keyof T)[],
-    targetValue: string,
-  ): number {
+  function countOccurrences(arr: Match[], targetTeam: string): number {
     let count = 0;
 
-    arr.forEach((obj) => {
-      properties.forEach((property) => {
-        const value = obj[property];
-        if (value === targetValue) {
-          count++;
-        }
-      });
+    arr.forEach((match) => {
+      if (match.team1 === targetTeam || match.team2 === targetTeam) {
+        count++;
+      }
     });
 
     return count;
@@ -168,7 +159,7 @@ export default function Home() {
     return count;
   }
 
-  // Number of wins
+  // Number of points
   function countPoints(arr: Match[], targetTeam: string): number {
     const wins = countWins(arr, targetTeam);
     const ties = countTies(arr, targetTeam);
@@ -186,9 +177,20 @@ export default function Home() {
     "Cyan",
   ];
 
+  const sortedTeams = teams.sort(function (a, b) {
+    let teamAPoints = countPoints(list, a);
+    let teamBPoints = countPoints(list, b);
+    let teamAGamesPlayed = countOccurrences(list, a);
+    let teamBGamesPlayed = countOccurrences(list, b);
+
+    if (teamBPoints !== teamAPoints) {
+      return teamBPoints - teamAPoints;
+    } else return teamBGamesPlayed - teamAGamesPlayed;
+  });
+
   return (
-    <main className="min-h-screen p-24 flex flex-col items-center">
-      <div className="flex flex-col w-6/12">
+    <main className="min-h-screen p-5 md:p-24 flex flex-col items-center">
+      <div className="flex flex-col w-full md:w-6/12">
         <div className="flex flex-row justify-between mb-4">
           <div>
             <ToggleGroup
@@ -218,109 +220,117 @@ export default function Home() {
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-8"
                 >
-                  <FormField
-                    control={form.control}
-                    name="team1"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Team 1</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
+                  <div className="flex flex-row items-center gap-2">
+                    <div className="size-4/6">
+                      <FormField
+                        control={form.control}
+                        name="team1"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Team 1</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a team" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="Blue">Blue</SelectItem>
+                                <SelectItem value="Red">Red</SelectItem>
+                                <SelectItem value="Green">Green</SelectItem>
+                                <SelectItem value="Yellow">Yellow</SelectItem>
+                                <SelectItem value="Orange">Orange</SelectItem>
+                                <SelectItem value="Purple">Purple</SelectItem>
+                                <SelectItem value="Pink">Pink</SelectItem>
+                                <SelectItem value="Cyan">Cyan</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <FormField
+                      control={form.control}
+                      rules={{ required: true }}
+                      name="score1"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Score</FormLabel>
                           <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a team" />
-                            </SelectTrigger>
+                            <Input
+                              placeholder="0"
+                              {...field}
+                              onChange={field.onChange}
+                            />
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Blue">Blue</SelectItem>
-                            <SelectItem value="Red">Red</SelectItem>
-                            <SelectItem value="Green">Green</SelectItem>
-                            <SelectItem value="Yellow">Yellow</SelectItem>
-                            <SelectItem value="Orange">Orange</SelectItem>
-                            <SelectItem value="Purple">Purple</SelectItem>
-                            <SelectItem value="Pink">Pink</SelectItem>
-                            <SelectItem value="Cyan">Cyan</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="team2"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Team 2</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="flex flex-row items-center gap-2">
+                    <div className="size-4/6">
+                      <FormField
+                        control={form.control}
+                        name="team2"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Team 2</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a team" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="Blue">Blue</SelectItem>
+                                <SelectItem value="Red">Red</SelectItem>
+                                <SelectItem value="Green">Green</SelectItem>
+                                <SelectItem value="Yellow">Yellow</SelectItem>
+                                <SelectItem value="Orange">Orange</SelectItem>
+                                <SelectItem value="Purple">Purple</SelectItem>
+                                <SelectItem value="Pink">Pink</SelectItem>
+                                <SelectItem value="Cyan">Cyan</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <FormField
+                      control={form.control}
+                      rules={{ required: true }}
+                      name="score2"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Score</FormLabel>
                           <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a team" />
-                            </SelectTrigger>
+                            <Input
+                              placeholder="0"
+                              {...field}
+                              onChange={field.onChange}
+                            />
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Blue">Blue</SelectItem>
-                            <SelectItem value="Red">Red</SelectItem>
-                            <SelectItem value="Green">Green</SelectItem>
-                            <SelectItem value="Yellow">Yellow</SelectItem>
-                            <SelectItem value="Orange">Orange</SelectItem>
-                            <SelectItem value="Purple">Purple</SelectItem>
-                            <SelectItem value="Pink">Pink</SelectItem>
-                            <SelectItem value="Cyan">Cyan</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    rules={{ required: true }}
-                    name="score1"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Score 1</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="0"
-                            {...field}
-                            onChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    rules={{ required: true }}
-                    name="score2"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Score 2</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="0"
-                            {...field}
-                            onChange={field.onChange}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <FormField
                     control={form.control}
                     name="date"
                     rules={{ required: true }}
                     render={({ field }) => (
                       <FormItem className="flex flex-col w-full">
-                        <FormLabel>Match date</FormLabel>
+                        <FormLabel>Date</FormLabel>
                         <Popover>
                           <PopoverTrigger asChild>
                             <FormControl>
@@ -353,7 +363,7 @@ export default function Home() {
                       </FormItem>
                     )}
                   />
-                  <DialogClose asChild>
+                  <DialogClose asChild className="w-full">
                     <Button type="submit">Submit</Button>
                   </DialogClose>
                 </form>
@@ -372,7 +382,7 @@ export default function Home() {
             <TableBody>
               {sortedList.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell>{item.date.toLocaleDateString()}</TableCell>
+                  <TableCell> {format(item.date, "PPP")}</TableCell>
                   <TableCell className="flex flex-row items-center gap-3">
                     <div className="flex flex-row items-center gap-2">
                       {item.score1 > item.score2 ? (
@@ -418,19 +428,16 @@ export default function Home() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {teams.map((team) => (
+              {sortedTeams.map((team) => (
                 <TableRow key={team}>
                   <TableCell className="font-medium">{team}</TableCell>
-                  <TableCell>
-                    {countOccurrences(list, ["team1", "team2"], team)}
-                  </TableCell>
+                  <TableCell>{countOccurrences(list, team)}</TableCell>
                   <TableCell>{countWins(list, team)}</TableCell>
                   <TableCell>{countLosses(list, team)}</TableCell>
                   <TableCell>{countTies(list, team)}</TableCell>
                   <TableCell>{countPoints(list, team)}</TableCell>
                 </TableRow>
               ))}
-              ;
             </TableBody>
           </Table>
         )}
