@@ -197,7 +197,8 @@ export default function Home() {
           </p>
           <p className="text-sm text-zinc-600 leading-relaxed">
             Information about the ongoing Fifa tournament. Add and view recently
-            played matches, and see who's currently leading in the rankings.
+            played matches, and see who&apos;s currently leading in the
+            rankings.
           </p>
         </div>
         <div className="flex flex-row justify-between mb-4">
