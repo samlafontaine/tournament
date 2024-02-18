@@ -93,13 +93,101 @@ export default function Home() {
     console.log(values);
   }
 
+  const sortedList = list.sort(function (a, b) {
+    let dateA = new Date(a.date).getTime();
+    let dateB = new Date(b.date).getTime();
+    return dateB - dateA;
+  });
+
+  // Number of games played
+
+  function countOccurrences<T>(
+    arr: T[],
+    properties: (keyof T)[],
+    targetValue: string,
+  ): number {
+    let count = 0;
+
+    arr.forEach((obj) => {
+      properties.forEach((property) => {
+        const value = obj[property];
+        if (value === targetValue) {
+          count++;
+        }
+      });
+    });
+
+    return count;
+  }
+
+  // Number of wins
+  function countWins(arr: Match[], targetTeam: string): number {
+    let count = 0;
+
+    arr.forEach((match) => {
+      if (
+        (match.team1 === targetTeam && match.score1 > match.score2) ||
+        (match.team2 === targetTeam && match.score2 > match.score1)
+      ) {
+        count++;
+      }
+    });
+
+    return count;
+  }
+
+  // Number of losses
+  function countLosses(arr: Match[], targetTeam: string): number {
+    let count = 0;
+
+    arr.forEach((match) => {
+      if (
+        (match.team1 === targetTeam && match.score1 < match.score2) ||
+        (match.team2 === targetTeam && match.score2 < match.score1)
+      ) {
+        count++;
+      }
+    });
+
+    return count;
+  }
+
+  // Number of ties
+  function countTies(arr: Match[], targetTeam: string): number {
+    let count = 0;
+
+    arr.forEach((match) => {
+      if (
+        (match.team1 === targetTeam && match.score1 == match.score2) ||
+        (match.team2 === targetTeam && match.score2 == match.score1)
+      ) {
+        count++;
+      }
+    });
+
+    return count;
+  }
+
+  // Number of wins
+  function countPoints(arr: Match[], targetTeam: string): number {
+    const wins = countWins(arr, targetTeam);
+    const ties = countTies(arr, targetTeam);
+    return wins * 2 + ties;
+  }
+
+  const teams = [
+    "Yellow",
+    "Red",
+    "Blue",
+    "Green",
+    "Orange",
+    "Purple",
+    "Pink",
+    "Cyan",
+  ];
+
   return (
     <main className="min-h-screen p-24 flex flex-col items-center">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed mb-20 left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Fifa tournament
-        </p>
-      </div>
       <div className="flex flex-col w-6/12">
         <div className="flex flex-row justify-between mb-4">
           <div>
@@ -274,62 +362,77 @@ export default function Home() {
           </Dialog>
         </div>
         {selectedValue === "matches" ? (
-          <div>
-            {list.map((item, index) => (
-              <div key={index}>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[200px]">Date</TableHead>
-                      <TableHead>Result</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell className="font-normal">
-                        {item.date.toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-row items-center gap-3">
-                          <div className="flex flex-row items-center gap-2">
-                            {item.score1 > item.score2 ? (
-                              <span className="text-zinc-900 font-medium">
-                                {item.team1}
-                              </span>
-                            ) : (
-                              <span className="text-zinc-500">
-                                {item.team1}
-                              </span>
-                            )}
-                            <span className="p-1 bg-zinc-100 text-zinc-900 rounded">
-                              {item.score1}
-                            </span>
-                          </div>
-                          <div>–</div>
-                          <div className="flex flex-row items-center gap-2">
-                            <span className="p-1 bg-zinc-100 text-zinc-900 rounded">
-                              {item.score2}
-                            </span>
-                            {item.score2 > item.score1 ? (
-                              <span className="text-zinc-900 font-medium">
-                                {item.team2}
-                              </span>
-                            ) : (
-                              <span className="text-zinc-500">
-                                {item.team2}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </div>
-            ))}
-          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Date</TableHead>
+                <TableHead>Score</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {sortedList.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell>{item.date.toLocaleDateString()}</TableCell>
+                  <TableCell className="flex flex-row items-center gap-3">
+                    <div className="flex flex-row items-center gap-2">
+                      {item.score1 > item.score2 ? (
+                        <span className="text-zinc-900 font-medium">
+                          {item.team1}
+                        </span>
+                      ) : (
+                        <span className="text-zinc-500">{item.team1}</span>
+                      )}
+                      <span className="p-1 bg-zinc-100 text-zinc-900 rounded">
+                        {item.score1}
+                      </span>
+                    </div>
+                    <div>–</div>
+                    <div className="flex flex-row items-center gap-2">
+                      <span className="p-1 bg-zinc-100 text-zinc-900 rounded">
+                        {item.score2}
+                      </span>
+                      {item.score2 > item.score1 ? (
+                        <span className="text-zinc-900 font-medium">
+                          {item.team2}
+                        </span>
+                      ) : (
+                        <span className="text-zinc-500">{item.team2}</span>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         ) : (
-          <p>hello</p>
+          <Table>
+            <TableCaption>General rankings</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Team</TableHead>
+                <TableHead>GP</TableHead>
+                <TableHead>Wins</TableHead>
+                <TableHead>Losses</TableHead>
+                <TableHead>Ties</TableHead>
+                <TableHead>Points</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {teams.map((team) => (
+                <TableRow key={team}>
+                  <TableCell className="font-medium">{team}</TableCell>
+                  <TableCell>
+                    {countOccurrences(list, ["team1", "team2"], team)}
+                  </TableCell>
+                  <TableCell>{countWins(list, team)}</TableCell>
+                  <TableCell>{countLosses(list, team)}</TableCell>
+                  <TableCell>{countTies(list, team)}</TableCell>
+                  <TableCell>{countPoints(list, team)}</TableCell>
+                </TableRow>
+              ))}
+              ;
+            </TableBody>
+          </Table>
         )}
       </div>
     </main>
