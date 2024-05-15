@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -41,10 +42,17 @@ const matchSchema = z.object({
 type SubmitHandler = (values: z.infer<typeof matchSchema>) => void;
 
 interface MatchFormProps {
-  onSubmit: SubmitHandler; // Define the type for onSubmit prop
+  onSubmit: SubmitHandler;
+  teams: string[];
+  onAddTeam: (team: string) => void;
 }
 
-const MatchForm: React.FC<MatchFormProps> = ({ onSubmit }) => {
+const MatchForm: React.FC<MatchFormProps> = ({
+  onSubmit,
+  teams,
+  onAddTeam,
+}) => {
+  const [newTeam, setNewTeam] = useState("");
   const form = useForm({
     resolver: zodResolver(matchSchema),
     defaultValues: {
@@ -55,6 +63,13 @@ const MatchForm: React.FC<MatchFormProps> = ({ onSubmit }) => {
       date: new Date(),
     },
   });
+
+  const handleAddNewTeam = () => {
+    if (newTeam.trim() !== "") {
+      onAddTeam(newTeam.trim());
+      setNewTeam("");
+    }
+  };
 
   return (
     <Form {...form}>
@@ -77,14 +92,11 @@ const MatchForm: React.FC<MatchFormProps> = ({ onSubmit }) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Blue">Blue</SelectItem>
-                      <SelectItem value="Red">Red</SelectItem>
-                      <SelectItem value="Green">Green</SelectItem>
-                      <SelectItem value="Yellow">Yellow</SelectItem>
-                      <SelectItem value="Orange">Orange</SelectItem>
-                      <SelectItem value="Purple">Purple</SelectItem>
-                      <SelectItem value="Pink">Pink</SelectItem>
-                      <SelectItem value="Cyan">Cyan</SelectItem>
+                      {teams.map((team) => (
+                        <SelectItem key={team} value={team}>
+                          {team}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -125,14 +137,11 @@ const MatchForm: React.FC<MatchFormProps> = ({ onSubmit }) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Blue">Blue</SelectItem>
-                      <SelectItem value="Red">Red</SelectItem>
-                      <SelectItem value="Green">Green</SelectItem>
-                      <SelectItem value="Yellow">Yellow</SelectItem>
-                      <SelectItem value="Orange">Orange</SelectItem>
-                      <SelectItem value="Purple">Purple</SelectItem>
-                      <SelectItem value="Pink">Pink</SelectItem>
-                      <SelectItem value="Cyan">Cyan</SelectItem>
+                      {teams.map((team) => (
+                        <SelectItem key={team} value={team}>
+                          {team}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -194,6 +203,14 @@ const MatchForm: React.FC<MatchFormProps> = ({ onSubmit }) => {
             </FormItem>
           )}
         />
+        <div className="flex flex-row items-center gap-2">
+          <Input
+            placeholder="New Team Name"
+            value={newTeam}
+            onChange={(e) => setNewTeam(e.target.value)}
+          />
+          <Button onClick={handleAddNewTeam}>Add Team</Button>
+        </div>
         <DialogClose asChild className="w-full">
           <Button type="submit">Submit</Button>
         </DialogClose>
