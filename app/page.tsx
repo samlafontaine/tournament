@@ -45,6 +45,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { MenuIcon } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const matchSchema = z.object({
   team1: z.string(),
@@ -197,9 +206,23 @@ export default function Home() {
     <>
       <main className="min-h-screen p-5 md:p-24 flex flex-col items-center">
         <div className="flex flex-col w-full md:w-6/12">
+          <div className="ml-[100%]">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <MenuIcon className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Settings</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Add team</DropdownMenuItem>
+                <DropdownMenuItem>View teams</DropdownMenuItem>
+                <DropdownMenuItem>Edit name</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <Header tournamentName={tournamentName} />
           <Popover>
-            <PopoverTrigger>View team list</PopoverTrigger>
+            <PopoverTrigger>View teams</PopoverTrigger>
             <PopoverContent>
               <TeamsList teams={teams} />
             </PopoverContent>
