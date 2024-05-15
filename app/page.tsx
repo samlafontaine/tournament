@@ -39,6 +39,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import AddTeam from "./add-team";
+import TeamsList from "./teams";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const matchSchema = z.object({
   team1: z.string(),
@@ -192,6 +198,12 @@ export default function Home() {
       <main className="min-h-screen p-5 md:p-24 flex flex-col items-center">
         <div className="flex flex-col w-full md:w-6/12">
           <Header tournamentName={tournamentName} />
+          <Popover>
+            <PopoverTrigger>View team list</PopoverTrigger>
+            <PopoverContent>
+              <TeamsList teams={teams} />
+            </PopoverContent>
+          </Popover>
           <div className="flex flex-row justify-between mb-4">
             <div>
               <ToggleGroup
