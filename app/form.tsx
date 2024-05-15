@@ -64,13 +64,6 @@ const MatchForm: React.FC<MatchFormProps> = ({
     },
   });
 
-  const handleAddNewTeam = () => {
-    if (newTeam.trim() !== "") {
-      onAddTeam(newTeam.trim());
-      setNewTeam("");
-    }
-  };
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -203,14 +196,6 @@ const MatchForm: React.FC<MatchFormProps> = ({
             </FormItem>
           )}
         />
-        <div className="flex flex-row items-center gap-2">
-          <Input
-            placeholder="New Team Name"
-            value={newTeam}
-            onChange={(e) => setNewTeam(e.target.value)}
-          />
-          <Button onClick={handleAddNewTeam}>Add Team</Button>
-        </div>
         <DialogClose asChild className="w-full">
           <Button type="submit">Submit</Button>
         </DialogClose>

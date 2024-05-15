@@ -151,16 +151,7 @@ export default function Home() {
     return wins * 2 + ties;
   }
 
-  const [teams, setTeams] = useState<string[]>([
-    "Yellow",
-    "Red",
-    "Blue",
-    "Green",
-    "Orange",
-    "Purple",
-    "Pink",
-    "Cyan",
-  ]);
+  const [teams, setTeams] = useState<string[]>([]);
 
   const handleAddTeam = (newTeam: string) => {
     setTeams([...teams, newTeam]);
@@ -215,7 +206,7 @@ export default function Home() {
                 <ToggleGroupItem value="rankings">Rankings</ToggleGroupItem>
               </ToggleGroup>
             </div>
-            <div>
+            <div className="flex flex-row gap-1">
               <Dialog>
                 <DialogTrigger asChild>
                   <Button size="sm">
@@ -239,7 +230,7 @@ export default function Home() {
               </Dialog>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button size="sm">
+                  <Button size="sm" variant={"outline"}>
                     <PlusIcon className="h-4 w-4 mr-1" />
                     Add team
                   </Button>
