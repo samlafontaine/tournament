@@ -9,17 +9,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import AddTeam from "./add-team";
+import ViewTeamsDialog from "./view-teams";
 
 interface SettingsDropdownMenuProps {
   onOpenEditNameDialog: () => void;
   onAddTeam: (newTeam: string) => void;
+  teams: string[];
 }
 
 const SettingsDropdownMenu: React.FC<SettingsDropdownMenuProps> = ({
   onOpenEditNameDialog,
   onAddTeam,
+  teams,
 }) => {
   const [isAddTeamDialogOpen, setIsAddTeamDialogOpen] = useState(false);
+  const [isViewTeamsDialogOpen, setIsViewTeamsDialogOpen] = useState(false);
 
   const handleAddTeam = (newTeam: string) => {
     onAddTeam(newTeam);
@@ -41,6 +45,9 @@ const SettingsDropdownMenu: React.FC<SettingsDropdownMenuProps> = ({
           <DropdownMenuItem onClick={() => setIsAddTeamDialogOpen(true)}>
             Add team
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsViewTeamsDialogOpen(true)}>
+            View teams
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -49,6 +56,13 @@ const SettingsDropdownMenu: React.FC<SettingsDropdownMenuProps> = ({
         open={isAddTeamDialogOpen}
         onClose={() => setIsAddTeamDialogOpen(false)}
         onAddTeam={handleAddTeam}
+      />
+
+      {/* View Teams Dialog */}
+      <ViewTeamsDialog
+        open={isViewTeamsDialogOpen}
+        onClose={() => setIsViewTeamsDialogOpen(false)}
+        teams={teams}
       />
     </>
   );

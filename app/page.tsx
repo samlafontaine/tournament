@@ -178,15 +178,10 @@ export default function Home() {
             <SettingsDropdownMenu
               onOpenEditNameDialog={() => setIsEditNameDialogOpen(true)}
               onAddTeam={handleAddTeam}
+              teams={teams}
             />
           </div>
           <Header tournamentName={tournamentName} />
-          <Popover>
-            <PopoverTrigger>View teams</PopoverTrigger>
-            <PopoverContent>
-              <TeamsList teams={teams} />
-            </PopoverContent>
-          </Popover>
           <div className="flex flex-row justify-between mb-4">
             <div>
               <ToggleGroup
