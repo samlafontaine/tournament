@@ -12,19 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { z } from "zod";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { format } from "date-fns";
 import MatchForm from "./form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,17 +34,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { MenuIcon } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import MatchTable from "./matches-table";
 import RankingsTable from "./rankings-table";
+import SettingsDropdownMenu from "./menu";
 
 const matchSchema = z.object({
   team1: z.string(),
@@ -209,18 +190,9 @@ export default function Home() {
       <main className="min-h-screen p-5 md:p-24 flex flex-col items-center">
         <div className="flex flex-col w-full md:w-6/12">
           <div className="ml-[100%]">
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <MenuIcon className="h-4 w-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>Settings</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Add team</DropdownMenuItem>
-                <DropdownMenuItem>View teams</DropdownMenuItem>
-                <DropdownMenuItem>Edit name</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <SettingsDropdownMenu
+              setIsWelcomeDialogOpen={setIsWelcomeDialogOpen}
+            />
           </div>
           <Header tournamentName={tournamentName} />
           <Popover>
@@ -265,21 +237,7 @@ export default function Home() {
                   />
                 </DialogContent>
               </Dialog>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button size="sm" variant={"outline"}>
-                    <PlusIcon className="h-4 w-4 mr-1" />
-                    Add team
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Add team</DialogTitle>
-                    <DialogDescription>Add a new team</DialogDescription>
-                  </DialogHeader>
-                  <AddTeam onAddTeam={handleAddTeam} />
-                </DialogContent>
-              </Dialog>
+              <AddTeam onAddTeam={handleAddTeam} />
             </div>
           </div>
           {selectedValue === "matches" ? (
@@ -287,7 +245,7 @@ export default function Home() {
           ) : (
             <RankingsTable
               sortedTeams={sortedTeams}
-              list={sortedList} // Pass the list prop
+              list={sortedList}
               countOccurrences={countOccurrences}
               countWins={countWins}
               countLosses={countLosses}

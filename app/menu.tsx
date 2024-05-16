@@ -1,3 +1,5 @@
+// menu.tsx
+import React from "react";
 import { MenuIcon } from "lucide-react";
 import {
   DropdownMenu,
@@ -8,7 +10,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function StartMenu() {
+interface SettingsDropdownMenuProps {
+  setIsWelcomeDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const SettingsDropdownMenu: React.FC<SettingsDropdownMenuProps> = ({
+  setIsWelcomeDialogOpen,
+}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -18,8 +26,15 @@ export default function StartMenu() {
         <DropdownMenuLabel>Settings</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Add team</DropdownMenuItem>
-        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => setIsWelcomeDialogOpen(true)}
+          className="cursor-pointer hover:font-medium"
+        >
+          Edit name
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};
+
+export default SettingsDropdownMenu;
