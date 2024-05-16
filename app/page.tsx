@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Header from "./header";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Button } from "@/components/ui/button";
@@ -37,6 +37,7 @@ import {
 import MatchTable from "./matches-table";
 import RankingsTable from "./rankings-table";
 import SettingsDropdownMenu from "./menu";
+import EditName from "./edit-name"; // Import EditName component
 
 const matchSchema = z.object({
   team1: z.string(),
@@ -62,8 +63,7 @@ export default function Home() {
   const [list, setList] = useState<Match[]>([]);
   const [selectedValue, setSelectedValue] = useState("matches");
   const [tournamentName, setTournamentName] = useState("tournament");
-  const [isWelcomeDialogOpen, setIsWelcomeDialogOpen] = useState(false);
-  const [showAddTeamDialog, setShowAddTeamDialog] = useState(false);
+  const [isEditNameDialogOpen, setIsEditNameDialogOpen] = useState(false);
 
   const handleToggleChange = (value: string) => {
     setSelectedValue(value);
@@ -81,7 +81,6 @@ export default function Home() {
   });
 
   // Number of games played
-
   function countOccurrences(arr: Match[], targetTeam: string): number {
     let count = 0;
 
@@ -132,8 +131,8 @@ export default function Home() {
 
     arr.forEach((match) => {
       if (
-        (match.team1 === targetTeam && match.score1 == match.score2) ||
-        (match.team2 === targetTeam && match.score2 == match.score1)
+        (match.team1 === targetTeam && match.score1 === match.score2) ||
+        (match.team2 === targetTeam && match.score2 === match.score1)
       ) {
         count++;
       }
@@ -153,7 +152,6 @@ export default function Home() {
 
   const handleAddTeam = (newTeam: string) => {
     setTeams([...teams, newTeam]);
-    setShowAddTeamDialog(false);
   };
 
   const sortedTeams = teams.sort(function (a, b) {
@@ -167,23 +165,10 @@ export default function Home() {
     } else return teamBGamesPlayed - teamAGamesPlayed;
   });
 
-  const form = useForm<z.infer<typeof tournamentFormSchema>>({
-    resolver: zodResolver(tournamentFormSchema),
-    defaultValues: {
-      name: "",
-    },
-  });
-
-  function handleTournamentNameSubmit(
-    values: z.infer<typeof tournamentFormSchema>,
-  ) {
+  const handleEditNameSubmit = (values: { name: string }) => {
     setTournamentName(values.name);
-    setIsWelcomeDialogOpen(false);
-  }
-
-  useEffect(() => {
-    setIsWelcomeDialogOpen(true);
-  }, []);
+    setIsEditNameDialogOpen(false);
+  };
 
   return (
     <>
@@ -191,7 +176,8 @@ export default function Home() {
         <div className="flex flex-col w-full md:w-6/12">
           <div className="ml-[100%]">
             <SettingsDropdownMenu
-              setIsWelcomeDialogOpen={setIsWelcomeDialogOpen}
+              onOpenEditNameDialog={() => setIsEditNameDialogOpen(true)}
+              onAddTeam={handleAddTeam}
             />
           </div>
           <Header tournamentName={tournamentName} />
@@ -237,7 +223,6 @@ export default function Home() {
                   />
                 </DialogContent>
               </Dialog>
-              <AddTeam onAddTeam={handleAddTeam} />
             </div>
           </div>
           {selectedValue === "matches" ? (
@@ -256,42 +241,12 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Welcome Dialog */}
-      <Dialog open={isWelcomeDialogOpen} onOpenChange={setIsWelcomeDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Welcome!</DialogTitle>
-            <DialogDescription>
-              Enter the name of your tournament
-            </DialogDescription>
-          </DialogHeader>
-
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleTournamentNameSubmit)}
-              className="space-y-8"
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tournament Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="shadcn" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      This is your public display name.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit">Submit</Button>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
+      {/* Edit Name Dialog */}
+      <EditName
+        open={isEditNameDialogOpen}
+        onClose={() => setIsEditNameDialogOpen(false)}
+        onSubmit={handleEditNameSubmit}
+      />
     </>
   );
 }

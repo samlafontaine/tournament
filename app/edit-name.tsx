@@ -21,21 +21,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 
-interface WelcomeDialogProps {
+const tournamentFormSchema = z.object({
+  name: z.string().min(1, "Tournament name is required"),
+});
+
+interface EditNameProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (values: { name: string }) => void;
 }
 
-const tournamentFormSchema = z.object({
-  name: z.string().min(1, "Tournament name is required"),
-});
-
-const EditName: React.FC<WelcomeDialogProps> = ({
-  open,
-  onClose,
-  onSubmit,
-}) => {
+const EditName: React.FC<EditNameProps> = ({ open, onClose, onSubmit }) => {
   const form = useForm<z.infer<typeof tournamentFormSchema>>({
     resolver: zodResolver(tournamentFormSchema),
     defaultValues: {
@@ -53,7 +49,7 @@ const EditName: React.FC<WelcomeDialogProps> = ({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Welcome!</DialogTitle>
+          <DialogTitle>Edit Tournament Name</DialogTitle>
           <DialogDescription>
             Enter the name of your tournament
           </DialogDescription>

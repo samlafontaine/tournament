@@ -1,5 +1,4 @@
-// menu.tsx
-import React from "react";
+import React, { useState } from "react";
 import { MenuIcon } from "lucide-react";
 import {
   DropdownMenu,
@@ -9,31 +8,49 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import AddTeam from "./add-team";
 
 interface SettingsDropdownMenuProps {
-  setIsWelcomeDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onOpenEditNameDialog: () => void;
+  onAddTeam: (newTeam: string) => void;
 }
 
 const SettingsDropdownMenu: React.FC<SettingsDropdownMenuProps> = ({
-  setIsWelcomeDialogOpen,
+  onOpenEditNameDialog,
+  onAddTeam,
 }) => {
+  const [isAddTeamDialogOpen, setIsAddTeamDialogOpen] = useState(false);
+
+  const handleAddTeam = (newTeam: string) => {
+    onAddTeam(newTeam);
+    setIsAddTeamDialogOpen(false);
+  };
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <MenuIcon className="h-4 w-4" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>Settings</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Add team</DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setIsWelcomeDialogOpen(true)}
-          className="cursor-pointer hover:font-medium"
-        >
-          Edit name
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <MenuIcon className="h-4 w-4" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>Settings</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={onOpenEditNameDialog}>
+            Edit name
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsAddTeamDialogOpen(true)}>
+            Add team
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* Add Team Dialog */}
+      <AddTeam
+        open={isAddTeamDialogOpen}
+        onClose={() => setIsAddTeamDialogOpen(false)}
+        onAddTeam={handleAddTeam}
+      />
+    </>
   );
 };
 
