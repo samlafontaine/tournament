@@ -54,6 +54,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import MatchTable from "./matches-table";
+import RankingsTable from "./rankings-table";
 
 const matchSchema = z.object({
   team1: z.string(),
@@ -281,74 +283,17 @@ export default function Home() {
             </div>
           </div>
           {selectedValue === "matches" ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Score</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sortedList.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell> {format(item.date, "PPP")}</TableCell>
-                    <TableCell className="flex flex-row items-center gap-3">
-                      <div className="flex flex-row items-center gap-2">
-                        {item.score1 > item.score2 ? (
-                          <span className="text-zinc-900 font-medium">
-                            {item.team1}
-                          </span>
-                        ) : (
-                          <span className="text-zinc-500">{item.team1}</span>
-                        )}
-                        <span className="p-1 bg-zinc-100 text-zinc-900 rounded">
-                          {item.score1}
-                        </span>
-                      </div>
-                      <div>–</div>
-                      <div className="flex flex-row items-center gap-2">
-                        <span className="p-1 bg-zinc-100 text-zinc-900 rounded">
-                          {item.score2}
-                        </span>
-                        {item.score2 > item.score1 ? (
-                          <span className="text-zinc-900 font-medium">
-                            {item.team2}
-                          </span>
-                        ) : (
-                          <span className="text-zinc-500">{item.team2}</span>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <MatchTable sortedList={sortedList} />
           ) : (
-            <Table>
-              <TableCaption>General rankings</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Team</TableHead>
-                  <TableHead>GP</TableHead>
-                  <TableHead>Wins</TableHead>
-                  <TableHead>Losses</TableHead>
-                  <TableHead>Ties</TableHead>
-                  <TableHead>Points</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sortedTeams.map((team) => (
-                  <TableRow key={team}>
-                    <TableCell className="font-medium">{team}</TableCell>
-                    <TableCell>{countOccurrences(list, team)}</TableCell>
-                    <TableCell>{countWins(list, team)}</TableCell>
-                    <TableCell>{countLosses(list, team)}</TableCell>
-                    <TableCell>{countTies(list, team)}</TableCell>
-                    <TableCell>{countPoints(list, team)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <RankingsTable
+              sortedTeams={sortedTeams}
+              list={sortedList} // Pass the list prop
+              countOccurrences={countOccurrences}
+              countWins={countWins}
+              countLosses={countLosses}
+              countTies={countTies}
+              countPoints={countPoints}
+            />
           )}
         </div>
       </main>
