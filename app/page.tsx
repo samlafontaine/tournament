@@ -19,6 +19,7 @@ import MatchTable from "./matches-table";
 import RankingsTable from "./rankings-table";
 import SettingsDropdownMenu from "./menu";
 import EditName from "./edit-name";
+import RankingsTableEmpty from "./rankings-table-empty";
 
 const matchSchema = z.object({
   team1: z.string(),
@@ -151,14 +152,22 @@ export default function Home() {
     <>
       <main className="min-h-screen p-5 md:p-24 flex flex-col items-center">
         <div className="flex flex-col w-full md:w-6/12">
-          <div className="ml-[100%]">
-            <SettingsDropdownMenu
-              onOpenEditNameDialog={() => setIsEditNameDialogOpen(true)}
-              onAddTeam={handleAddTeam}
-              teams={teams}
-            />
+          <div className="mb-12">
+            <div className="flex flex-row justify-between">
+              <Header tournamentName={tournamentName} />
+              <SettingsDropdownMenu
+                onOpenEditNameDialog={() => setIsEditNameDialogOpen(true)}
+                onAddTeam={handleAddTeam}
+                teams={teams}
+              />
+            </div>
+            <p className="text-sm text-zinc-600 leading-relaxed w-5/6">
+              Information about the ongoing{" "}
+              <span className="lowercase font-medium">{tournamentName}</span>.
+              Add and view recently played matches, and see who's currently
+              leading in the rankings.
+            </p>
           </div>
-          <Header tournamentName={tournamentName} />
           <div className="flex flex-row justify-between mb-4">
             <div>
               <ToggleGroup
@@ -199,7 +208,7 @@ export default function Home() {
           </div>
           {selectedValue === "matches" ? (
             <MatchTable sortedList={sortedList} />
-          ) : (
+          ) : teams.length > 0 ? (
             <RankingsTable
               sortedTeams={sortedTeams}
               list={sortedList}
@@ -209,6 +218,8 @@ export default function Home() {
               countTies={countTies}
               countPoints={countPoints}
             />
+          ) : (
+            <RankingsTableEmpty />
           )}
         </div>
       </main>
