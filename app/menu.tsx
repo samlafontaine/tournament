@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import AddTeam from "./add-team";
 import ViewTeamsDialog from "./view-teams";
+import { Pencil, Plus, Trophy } from "lucide-react";
 
 interface SettingsDropdownMenuProps {
   onOpenEditNameDialog: () => void;
@@ -39,13 +40,25 @@ const SettingsDropdownMenu: React.FC<SettingsDropdownMenuProps> = ({
         <DropdownMenuContent>
           <DropdownMenuLabel>Settings</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={onOpenEditNameDialog}>
+          <DropdownMenuItem
+            onClick={onOpenEditNameDialog}
+            className="flex flex-row gap-1 cursor-pointer hover:font-medium"
+          >
+            <Pencil className="h-3 w-3" />
             Edit name
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsAddTeamDialogOpen(true)}>
+          <DropdownMenuItem
+            onClick={() => setIsAddTeamDialogOpen(true)}
+            className="flex flex-row gap-1 cursor-pointer hover:font-medium"
+          >
+            <Plus className="h-3 w-3" />
             Add team
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsViewTeamsDialogOpen(true)}>
+          <DropdownMenuItem
+            onClick={() => setIsViewTeamsDialogOpen(true)}
+            className="flex flex-row gap-1 cursor-pointer hover:font-medium"
+          >
+            <Trophy className="h-3 w-3" />
             View teams
           </DropdownMenuItem>
         </DropdownMenuContent>

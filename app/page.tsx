@@ -15,29 +15,10 @@ import {
 } from "@/components/ui/dialog";
 import { z } from "zod";
 import MatchForm from "./form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-  FormDescription,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import AddTeam from "./add-team";
-import TeamsList from "./teams";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import MatchTable from "./matches-table";
 import RankingsTable from "./rankings-table";
 import SettingsDropdownMenu from "./menu";
-import EditName from "./edit-name"; // Import EditName component
+import EditName from "./edit-name";
 
 const matchSchema = z.object({
   team1: z.string(),
@@ -54,10 +35,6 @@ type Match = {
   score2: number;
   date: Date;
 };
-
-const tournamentFormSchema = z.object({
-  name: z.string().min(1, "Tournament name is required"),
-});
 
 export default function Home() {
   const [list, setList] = useState<Match[]>([]);
