@@ -37,7 +37,7 @@ const SettingsDropdownMenu: React.FC<SettingsDropdownMenuProps> = ({
         <DropdownMenuTrigger>
           <MenuIcon className="h-4 w-4" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end">
           <DropdownMenuLabel>Settings</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
