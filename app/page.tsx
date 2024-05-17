@@ -207,7 +207,11 @@ export default function Home() {
             list.length > 0 ? (
               <MatchTable sortedList={sortedList} />
             ) : (
-              <MatchesTableEmpty onAddTeam={handleAddTeam} teams={teams} />
+              <MatchesTableEmpty
+                onAddTeam={handleAddTeam}
+                teams={teams}
+                onSubmit={onSubmit}
+              />
             )
           ) : teams.length > 0 ? (
             <RankingsTable
