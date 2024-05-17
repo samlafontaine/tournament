@@ -7,10 +7,11 @@ interface TeamsListProps {
 const TeamsList: React.FC<TeamsListProps> = ({ teams }) => {
   return (
     <div>
-      <h2>Teams</h2>
-      <ul>
+      <ul className="divide-y divide-zinc-200">
         {teams.map((team, index) => (
-          <li key={index}>{team}</li>
+          <li key={index} className="py-2 text-md">
+            {index + 1}. {team}
+          </li>
         ))}
       </ul>
     </div>
