@@ -69,7 +69,7 @@ const EditName: React.FC<EditNameProps> = ({ open, onClose, onSubmit }) => {
                     <Input placeholder="Enter tournament name" {...field} />
                   </FormControl>
                   <FormDescription>
-                    This is your public display name.
+                    You can always change it again later.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

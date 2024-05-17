@@ -3,19 +3,19 @@ import { useState } from "react";
 import {
   Table,
   TableBody,
-  TableHead,
   TableRow,
-  TableCaption,
   TableHeader,
+  TableHead,
+  TableCaption,
 } from "@/components/ui/table";
 import AddTeam from "./add-team";
 
-interface RankingsTableEmptyProps {
+interface MatchesTableEmptyProps {
   onAddTeam: (newTeam: string) => void;
   teams: string[];
 }
 
-const RankingsTableEmpty: React.FC<RankingsTableEmptyProps> = ({
+const MatchesTableEmpty: React.FC<MatchesTableEmptyProps> = ({
   onAddTeam,
   teams,
 }) => {
@@ -24,27 +24,24 @@ const RankingsTableEmpty: React.FC<RankingsTableEmptyProps> = ({
     onAddTeam(newTeam);
     setIsAddTeamDialogOpen(false);
   };
+
   return (
     <>
       <Table>
         <TableCaption>
-          No team yet. Start by{" "}
+          No match yet. Start by adding a match. If you have no teams yet,{" "}
           <span
             onClick={() => setIsAddTeamDialogOpen(true)}
             className="underline font-medium cursor-pointer hover:decoration-2"
           >
-            adding a team
+            add your first team
           </span>
           .
         </TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Team</TableHead>
-            <TableHead>GP</TableHead>
-            <TableHead>Wins</TableHead>
-            <TableHead>Losses</TableHead>
-            <TableHead>Ties</TableHead>
-            <TableHead>Points</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Score</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody></TableBody>
@@ -60,4 +57,4 @@ const RankingsTableEmpty: React.FC<RankingsTableEmptyProps> = ({
   );
 };
 
-export default RankingsTableEmpty;
+export default MatchesTableEmpty;

@@ -44,15 +44,9 @@ type SubmitHandler = (values: z.infer<typeof matchSchema>) => void;
 interface MatchFormProps {
   onSubmit: SubmitHandler;
   teams: string[];
-  onAddTeam: (team: string) => void;
 }
 
-const MatchForm: React.FC<MatchFormProps> = ({
-  onSubmit,
-  teams,
-  onAddTeam,
-}) => {
-  const [newTeam, setNewTeam] = useState("");
+const MatchForm: React.FC<MatchFormProps> = ({ onSubmit, teams }) => {
   const form = useForm({
     resolver: zodResolver(matchSchema),
     defaultValues: {

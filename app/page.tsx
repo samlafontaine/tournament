@@ -20,6 +20,7 @@ import RankingsTable from "./rankings-table";
 import SettingsDropdownMenu from "./menu";
 import EditName from "./edit-name";
 import RankingsTableEmpty from "./rankings-table-empty";
+import MatchesTableEmpty from "./matches-table-empty";
 
 const matchSchema = z.object({
   team1: z.string(),
@@ -197,17 +198,17 @@ export default function Home() {
                       Add recently played match
                     </DialogDescription>
                   </DialogHeader>
-                  <MatchForm
-                    onSubmit={onSubmit}
-                    teams={teams}
-                    onAddTeam={handleAddTeam}
-                  />
+                  <MatchForm onSubmit={onSubmit} teams={teams} />
                 </DialogContent>
               </Dialog>
             </div>
           </div>
           {selectedValue === "matches" ? (
-            <MatchTable sortedList={sortedList} />
+            list.length > 0 ? (
+              <MatchTable sortedList={sortedList} />
+            ) : (
+              <MatchesTableEmpty onAddTeam={handleAddTeam} teams={teams} />
+            )
           ) : teams.length > 0 ? (
             <RankingsTable
               sortedTeams={sortedTeams}
@@ -219,7 +220,7 @@ export default function Home() {
               countPoints={countPoints}
             />
           ) : (
-            <RankingsTableEmpty />
+            <RankingsTableEmpty onAddTeam={handleAddTeam} teams={teams} />
           )}
         </div>
       </main>
