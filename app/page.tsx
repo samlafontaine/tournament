@@ -21,6 +21,7 @@ import SettingsDropdownMenu from "./menu";
 import EditName from "./edit-name";
 import RankingsTableEmpty from "./rankings-table-empty";
 import MatchesTableEmpty from "./matches-table-empty";
+import { Footer } from "./footer";
 
 const matchSchema = z.object({
   team1: z.string(),
@@ -151,7 +152,7 @@ export default function Home() {
 
   return (
     <>
-      <main className="min-h-screen p-5 md:p-24 flex flex-col items-center">
+      <main className="min-h-screen p-5 md:pt-24 flex flex-col items-center">
         <div className="flex flex-col w-full md:w-6/12">
           <div className="mb-12">
             <div className="flex flex-row justify-between">
@@ -227,6 +228,7 @@ export default function Home() {
             <RankingsTableEmpty onAddTeam={handleAddTeam} teams={teams} />
           )}
         </div>
+        <Footer />
       </main>
 
       {/* Edit Name Dialog */}
