@@ -61,6 +61,18 @@ const SettingsDropdownMenu: React.FC<SettingsDropdownMenuProps> = ({
             <Trophy className="h-3 w-3" />
             View teams
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <div className="w-28 px-2 py-0.5">
+            <p className="text-[10px] text-black">
+              built in Montréal by{" "}
+              <a
+                href="https://www.samlafontaine.com"
+                className="font-medium hover:italic"
+              >
+                Sam Lafontaine
+              </a>
+            </p>
+          </div>
         </DropdownMenuContent>
       </DropdownMenu>
 

@@ -228,7 +228,6 @@ export default function Home() {
             <RankingsTableEmpty onAddTeam={handleAddTeam} teams={teams} />
           )}
         </div>
-        <Footer />
       </main>
 
       {/* Edit Name Dialog */}
