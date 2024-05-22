@@ -10,7 +10,7 @@ import {
   TableCaption,
   TableHeader,
 } from "@/components/ui/table";
-import { Match } from "@/app/types/matches";
+import { Match } from "@/app/app/types/matches";
 
 interface RankingsTableProps {
   sortedTeams: string[];

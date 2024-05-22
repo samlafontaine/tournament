@@ -8,7 +8,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { format } from "date-fns";
-import { Match } from "@/app/types/matches";
+import { Match } from "@/app/app/types/matches";
 
 interface MatchTableProps {
   sortedList: Match[]; // Assuming you have defined Match type somewhere
