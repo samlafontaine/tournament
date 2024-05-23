@@ -152,83 +152,79 @@ export default function Home() {
 
   return (
     <>
-      <main className="min-h-screen p-5 md:pt-24 flex flex-col items-center">
-        <div className="flex flex-col w-full md:w-6/12">
-          <div className="mb-12">
-            <div className="flex flex-row justify-between">
-              <Header tournamentName={tournamentName} />
-              <SettingsDropdownMenu
-                onOpenEditNameDialog={() => setIsEditNameDialogOpen(true)}
-                onAddTeam={handleAddTeam}
-                teams={teams}
-              />
-            </div>
-            <p className="text-sm text-zinc-600 leading-relaxed w-5/6">
-              Information about the ongoing{" "}
-              <span className="lowercase font-medium">{tournamentName}</span>.
-              Add and view recently played matches, and see who's currently
-              leading in the rankings.
-            </p>
-          </div>
-          <div className="flex flex-row justify-between mb-4">
-            <div>
-              <ToggleGroup
-                type="single"
-                defaultValue="matches"
-                value={selectedValue}
-                onValueChange={handleToggleChange}
-              >
-                <ToggleGroupItem value="matches">
-                  Recent matches
-                </ToggleGroupItem>
-                <ToggleGroupItem value="rankings">Rankings</ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-            <div className="flex flex-row gap-1">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button size="sm">
-                    <PlusIcon className="h-4 w-4 mr-1" />
-                    New match
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Add match</DialogTitle>
-                    <DialogDescription>
-                      Add recently played match
-                    </DialogDescription>
-                  </DialogHeader>
-                  <MatchForm onSubmit={onSubmit} teams={teams} />
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
-          {selectedValue === "matches" ? (
-            list.length > 0 ? (
-              <MatchTable sortedList={sortedList} />
-            ) : (
-              <MatchesTableEmpty
-                onAddTeam={handleAddTeam}
-                teams={teams}
-                onSubmit={onSubmit}
-              />
-            )
-          ) : teams.length > 0 ? (
-            <RankingsTable
-              sortedTeams={sortedTeams}
-              list={sortedList}
-              countOccurrences={countOccurrences}
-              countWins={countWins}
-              countLosses={countLosses}
-              countTies={countTies}
-              countPoints={countPoints}
+      <div className="flex flex-col w-full md:w-6/12">
+        <div className="mb-12">
+          <div className="flex flex-row justify-between">
+            <Header tournamentName={tournamentName} />
+            <SettingsDropdownMenu
+              onOpenEditNameDialog={() => setIsEditNameDialogOpen(true)}
+              onAddTeam={handleAddTeam}
+              teams={teams}
             />
-          ) : (
-            <RankingsTableEmpty onAddTeam={handleAddTeam} teams={teams} />
-          )}
+          </div>
+          <p className="text-sm text-zinc-600 leading-relaxed w-5/6">
+            Information about the ongoing{" "}
+            <span className="lowercase font-medium">{tournamentName}</span>. Add
+            and view recently played matches, and see who's currently leading in
+            the rankings.
+          </p>
         </div>
-      </main>
+        <div className="flex flex-row justify-between mb-4">
+          <div>
+            <ToggleGroup
+              type="single"
+              defaultValue="matches"
+              value={selectedValue}
+              onValueChange={handleToggleChange}
+            >
+              <ToggleGroupItem value="matches">Recent matches</ToggleGroupItem>
+              <ToggleGroupItem value="rankings">Rankings</ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+          <div className="flex flex-row gap-1">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="sm">
+                  <PlusIcon className="h-4 w-4 mr-1" />
+                  New match
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add match</DialogTitle>
+                  <DialogDescription>
+                    Add recently played match
+                  </DialogDescription>
+                </DialogHeader>
+                <MatchForm onSubmit={onSubmit} teams={teams} />
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+        {selectedValue === "matches" ? (
+          list.length > 0 ? (
+            <MatchTable sortedList={sortedList} />
+          ) : (
+            <MatchesTableEmpty
+              onAddTeam={handleAddTeam}
+              teams={teams}
+              onSubmit={onSubmit}
+            />
+          )
+        ) : teams.length > 0 ? (
+          <RankingsTable
+            sortedTeams={sortedTeams}
+            list={sortedList}
+            countOccurrences={countOccurrences}
+            countWins={countWins}
+            countLosses={countLosses}
+            countTies={countTies}
+            countPoints={countPoints}
+          />
+        ) : (
+          <RankingsTableEmpty onAddTeam={handleAddTeam} teams={teams} />
+        )}
+      </div>
 
       {/* Edit Name Dialog */}
       <EditName

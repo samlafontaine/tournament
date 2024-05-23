@@ -32,8 +32,12 @@ export default function RootLayout({
             </div>
           </SignedOut>
           <SignedIn>
-            <UserButton />
-            {children}
+            <main className="min-h-screen p-5 md:pt-24 flex flex-col items-center">
+              <div className="items-start">
+                <UserButton />
+              </div>
+              {children}
+            </main>
           </SignedIn>
         </body>
       </html>
