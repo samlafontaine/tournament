@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import React from "react";
 
-function page() {
+export default async function Page() {
+  const user = await currentUser();
   return (
     <main>
       <ClerkProvider>
@@ -15,7 +17,7 @@ function page() {
           <SignedIn>
             <Link href="/app">
               <Button size={"sm"} variant={"secondary"} className="text-xs">
-                Go to app
+                Go to app {user?.firstName}
               </Button>
             </Link>
           </SignedIn>
@@ -59,5 +61,3 @@ function page() {
     </main>
   );
 }
-
-export default page;
